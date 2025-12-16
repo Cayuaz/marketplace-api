@@ -1,0 +1,19 @@
+{
+  // 1. Liga a extensão ESLint
+  "eslint.enable": true,
+
+  // 2. Define quais linguagens o ESLint deve rodar (incluindo TypeScript e JavaScript)
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "json",
+    "jsonc"
+  ],
+
+  // 3. (Opcional, mas recomendado) Corrige problemas do ESLint ao salvar o arquivo
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  }
+}
