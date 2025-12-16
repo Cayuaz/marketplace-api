@@ -18,7 +18,11 @@ node_modules/
 # Output of 'npm pack'
 *.tgz
 
+.env
 
 
 
 
+
+
+/generated/prisma
