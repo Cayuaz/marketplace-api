@@ -18,15 +18,46 @@ enum Role {
   USER
 }
 
+//Tabela usuários - cada usuário pode fazer diversos pedidos
 model User {
   id Int @id @default(autoincrement())
-  name String @db.VarChar(50)
+  name String @db.VarChar(60)
   lastname String @db.VarChar(150)
   role Role
-  email String @db.VarChar(150) @unique
+  email String @db.VarChar(255) @unique
   password String @db.VarChar(100)
+  orders Order[]
+  createdAt DateTime @default(now())
 }
 
-// model Products {
-//   id Int @id @default(autoincrement())
-// }
+//Tabel de produtos - um produto pode estar em diversos pedidos
+model Product {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(100)
+  price Decimal @db.Decimal(10, 2)
+  stock Int @default(0)
+  orderItem OrderItem[]
+  createdAt DateTime @default(now())
+}
+
+//Tabela de pedidos - um pedido pode ter diversos produtos 
+model Order {
+  id Int @id @default(autoincrement())
+  total Decimal @db.Decimal(10, 2)
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  orderitem OrderItem[]
+  createdAt DateTime @default(now())
+}
+
+//Tabela de ligação entre pedido x produto 
+//Essa tabela divide os pedidos de cada produto e liga eles com o respectivo pedido
+model OrderItem {
+  id Int @id @default(autoincrement())
+  quantity Int
+  price_un Decimal @db.Decimal(6, 2)
+  orderId Int
+  order Order @relation(fields: [orderId], references: [id])
+  productId Int
+  product Product @relation(fields: [productId], references: [id])
+}
