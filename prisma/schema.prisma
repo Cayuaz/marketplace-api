@@ -6,23 +6,27 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
 }
 
 enum Role {
-  admin
-  user
+  ADMIN
+  USER
 }
 
-model Users {
+model User {
   id Int @id @default(autoincrement())
   name String @db.VarChar(50)
   lastname String @db.VarChar(150)
-  role Role 
+  role Role
   email String @db.VarChar(150) @unique
   password String @db.VarChar(100)
 }
+
+// model Products {
+//   id Int @id @default(autoincrement())
+// }
