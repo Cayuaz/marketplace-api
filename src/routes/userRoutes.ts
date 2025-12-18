@@ -46,7 +46,7 @@ router.get("/:id", async (req, res) => {
       });
     }
 
-    return res.json({ user });
+    return res.json(user);
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -108,7 +108,7 @@ router.patch("/:id", async (req, res) => {
   Todos os dados são opcionais para permitir diferentes tipo de atualizações, 
   mas pelo menos 1 exigido conforme a verificação acima
   */
-  const { success: successDataUpdate, data: dataUserUpdate } =
+  const { success: successDataUpdate, data: dataUpdate } =
     updateUserSchema.safeParse(req.body);
 
   if (!successDataUpdate) {
@@ -122,10 +122,10 @@ router.patch("/:id", async (req, res) => {
     const user = await prisma.user.update({
       where: { id: parsedId },
       data: {
-        ...(dataUserUpdate?.name && { name: dataUserUpdate.name }),
-        ...(dataUserUpdate?.lastname && { lastname: dataUserUpdate.lastname }),
-        ...(dataUserUpdate?.email && { email: dataUserUpdate.email }),
-        ...(dataUserUpdate?.password && { password: dataUserUpdate.password }),
+        ...(dataUpdate?.name && { name: dataUpdate.name }),
+        ...(dataUpdate?.lastname && { lastname: dataUpdate.lastname }),
+        ...(dataUpdate?.email && { email: dataUpdate.email }),
+        ...(dataUpdate?.password && { password: dataUpdate.password }),
       },
     });
 
@@ -136,7 +136,7 @@ router.patch("/:id", async (req, res) => {
       });
     }
 
-    res.status(200).json(user);
+    return res.status(200).json(user);
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -167,7 +167,7 @@ router.delete("/:id", async (req, res) => {
       });
     }
 
-    res.status(204).end();
+    return res.status(204).end();
   } catch (error) {
     console.log(error);
     return res.status(500).json({
