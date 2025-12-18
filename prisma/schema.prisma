@@ -23,7 +23,7 @@ model User {
   id Int @id @default(autoincrement())
   name String @db.VarChar(60)
   lastname String @db.VarChar(150)
-  role Role
+  role Role @default(USER)
   email String @db.VarChar(255) @unique
   password String @db.VarChar(100)
   orders Order[]
@@ -55,7 +55,6 @@ model Order {
 model OrderItem {
   id Int @id @default(autoincrement())
   quantity Int
-  price_un Decimal @db.Decimal(6, 2)
   orderId Int
   order Order @relation(fields: [orderId], references: [id])
   productId Int

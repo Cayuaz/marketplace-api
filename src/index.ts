@@ -3,12 +3,20 @@
 //Products - products products/id (só para admin)
 
 import { prisma } from "./lib/prisma.js";
+import express from "express";
+import cors from "cors";
 
-// console.log("Hello world");
+const port = process.env.PORT || 3000;
+const app = express();
+
+app.use(cors());
+app.use(express.json());
 
 try {
   await prisma.$connect();
   console.log("Banco de dados ok");
+
+  app.listen(port, () => console.log("Server iniciado!"));
 } catch (error) {
   console.log(error);
 }
