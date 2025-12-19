@@ -1,4 +1,4 @@
-GET http://localhost:3000/users/3
+GET http://localhost:3000/users/100
 
 ###
 
@@ -23,3 +23,18 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:3000/users/3
+
+###
+
+GET http://localhost:3000/products
+
+###
+
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+ "name": "Camiseta",
+ "price": 129.99,
+ "stock": "2"
+}

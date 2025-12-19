@@ -28,9 +28,7 @@ const getProductByIdService = async (id: unknown) => {
   //Verifica se o id existe
   const { success, data: parsedId } = idSchema.safeParse(id);
 
-  if (!success) {
-    return { success: false, status: 400, error: invalidIdMsg };
-  }
+  if (!success) return { success: false, status: 400, error: invalidIdMsg };
 
   try {
     const product = await prisma.product.findUnique({
@@ -38,13 +36,12 @@ const getProductByIdService = async (id: unknown) => {
     });
 
     //Verifica se o prisma conseguiu achar o usuário
-    if (!product) {
+    if (!product)
       return {
         success: false,
         status: 404,
         error: `Não foi possível encontrar o usuário com o ID ${parsedId}.`,
       };
-    }
 
     return { success: true, status: 200, data: product };
   } catch (error) {
@@ -58,9 +55,8 @@ const createProductService = async (reqBody: unknown) => {
   //Verifica se o req.body é do tipo correto (name, price e stock)
   const { success, data } = createProductSchema.safeParse(reqBody);
 
-  if (!success) {
+  if (!success)
     return { success: false, status: 404, error: incompleteDataMSg };
-  }
 
   try {
     const product = await prisma.product.create({
@@ -82,9 +78,7 @@ const updateProductService = async (id: unknown, reqBody: unknown) => {
   //Verifica se o id existe
   const { success: successId, data: parsedId } = idSchema.safeParse(id);
 
-  if (!successId) {
-    return { success: false, status: 400, error: invalidIdMsg };
-  }
+  if (!successId) return { success: false, status: 400, error: invalidIdMsg };
 
   /*Verifica se o req.body é do tipo correto (name, price e stock)
   Todos os dados são opcionais para permitir diferentes tipo de atualizações
@@ -92,9 +86,8 @@ const updateProductService = async (id: unknown, reqBody: unknown) => {
   const { success: successDataUpdate, data: dataUpdate } =
     updateProductSchema.safeParse(reqBody);
 
-  if (!successDataUpdate) {
+  if (!successDataUpdate)
     return { success: false, status: 400, error: incompleteDataMSg };
-  }
 
   try {
     const product = await prisma.product.update({
@@ -107,13 +100,12 @@ const updateProductService = async (id: unknown, reqBody: unknown) => {
     });
 
     //Verifica se o prisma conseguiu achar o usuário e atualizar suas informações
-    if (!product) {
+    if (!product)
       return {
         success: false,
         status: 404,
         error: `Não foi possível encontrar um usuário com o ID ${parsedId}.`,
       };
-    }
 
     return { success: true, status: 200, data: product };
   } catch (error) {
@@ -127,9 +119,7 @@ const deleteProductService = async (id: unknown) => {
   //Verifica se o id existe
   const { success, data: parsedId } = idSchema.safeParse(id);
 
-  if (!success) {
-    return { success: false, status: 400, error: invalidIdMsg };
-  }
+  if (!success) return { success: false, status: 400, error: invalidIdMsg };
 
   try {
     const productDeleted = await prisma.product.delete({
@@ -137,13 +127,12 @@ const deleteProductService = async (id: unknown) => {
     });
 
     //Verifica se o usuário foi encontrado e deletado com sucesso
-    if (!productDeleted) {
+    if (!productDeleted)
       return {
         success: false,
         status: 404,
         error: `Não foi possível encontrar um usuário com o ID ${parsedId}.`,
       };
-    }
 
     return { success: true, status: 200 };
   } catch (error) {

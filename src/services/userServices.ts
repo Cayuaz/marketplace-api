@@ -30,21 +30,18 @@ const getUserByIdService = async (id: unknown) => {
   //Verifica se o id existe
   const { success, data: parsedId } = idSchema.safeParse(id);
 
-  if (!success) {
-    return { success: false, status: 400, error: invalidIdMsg };
-  }
+  if (!success) return { success: false, status: 400, error: invalidIdMsg };
 
   try {
     const user = await prisma.user.findUnique({ where: { id: parsedId } });
 
     //Verifica se o prisma conseguiu achar o usuário
-    if (!user) {
+    if (!user)
       return {
         success: false,
         status: 404,
         error: `Não foi possível encontrar o usuário com o ID ${parsedId}.`,
       };
-    }
 
     return { success: true, status: 200, data: user };
   } catch (error) {
@@ -58,13 +55,12 @@ const createUserService = async (reqBody: unknown) => {
   //Verifica se o req.body é do tipo correto (name, lastname, email e password)
   const { success, data: userData } = createUserSchema.safeParse(reqBody);
 
-  if (!success) {
+  if (!success)
     return {
       success: false,
       status: 400,
       error: incompleteDataMSg,
     };
-  }
 
   try {
     const user = await prisma.user.create({
@@ -87,9 +83,7 @@ const updateUserService = async (id: unknown, reqBody: unknown) => {
   //Verifica se o id existe
   const { success: successId, data: parsedId } = idSchema.safeParse(id);
 
-  if (!successId) {
-    return { success: false, status: 400, error: invalidIdMsg };
-  }
+  if (!successId) return { success: false, status: 400, error: invalidIdMsg };
 
   /*Verifica se o req.body é do tipo correto (name, lastname, email e password)
   Todos os dados são opcionais para permitir diferentes tipo de atualizações
@@ -97,9 +91,8 @@ const updateUserService = async (id: unknown, reqBody: unknown) => {
   const { success: successDataUpdate, data: dataUpdate } =
     updateUserSchema.safeParse(reqBody);
 
-  if (!successDataUpdate) {
+  if (!successDataUpdate)
     return { success: false, status: 400, error: incompleteDataMSg };
-  }
 
   try {
     const user = await prisma.user.update({
@@ -113,13 +106,12 @@ const updateUserService = async (id: unknown, reqBody: unknown) => {
     });
 
     //Verifica se o prisma conseguiu achar o usuário e atualizar suas informações
-    if (!user) {
+    if (!user)
       return {
         success: false,
         status: 404,
         error: `Não foi possível encontrar um usuário com o ID ${parsedId}.`,
       };
-    }
 
     return { success: true, status: 200, data: user };
   } catch (error) {
@@ -133,21 +125,18 @@ const deleteUserService = async (id: unknown) => {
   //Verifica se o id existe
   const { success, data: parsedId } = idSchema.safeParse(id);
 
-  if (!success) {
-    return { success: false, status: 400, error: invalidIdMsg };
-  }
+  if (!success) return { success: false, status: 400, error: invalidIdMsg };
 
   try {
     const userDeleted = await prisma.user.delete({ where: { id: parsedId } });
 
     //Verifica se o usuário foi encontrado e deletado com sucesso
-    if (!userDeleted) {
+    if (!userDeleted)
       return {
         success: false,
         status: 404,
         error: `Não foi possível encontrar um usuário com o ID ${parsedId}.`,
       };
-    }
 
     return { success: true, status: 200 };
   } catch (error) {
@@ -161,9 +150,7 @@ const getOrdersUserService = async (id: unknown) => {
   //Verifica se o id existe
   const { success, data: parsedId } = idSchema.safeParse(id);
 
-  if (!success) {
-    return { success: false, status: 400, error: invalidIdMsg };
-  }
+  if (!success) return { success: false, status: 400, error: invalidIdMsg };
 
   try {
     //Traz todos os pedidos do usuário a partir do ID dele
@@ -193,13 +180,12 @@ const getOrdersUserService = async (id: unknown) => {
     });
 
     //Verifica se userOrders é um array vazio
-    if (userOrders.length === 0) {
+    if (userOrders.length === 0)
       return {
         success: false,
         status: 404,
         error: `Não foi possível encontrar os pedidos do usuário com o ID ${parsedId}.`,
       };
-    }
 
     return { success: true, status: 200, data: userOrders };
   } catch (error) {
@@ -213,17 +199,14 @@ const createUserOrderService = async (id: unknown, reqBody: unknown) => {
   //Verifica se o id existe
   const { success: successId, data: parsedUserId } = idSchema.safeParse(id);
 
-  if (!successId) {
-    return { success: false, status: 400, error: invalidIdMsg };
-  }
+  if (!successId) return { success: false, status: 400, error: invalidIdMsg };
 
   //Verifica se o req.body é do tipo correto (productId e quantity)
   const { success: successOrder, data: orderData } =
     createOrderSchema.safeParse(reqBody);
 
-  if (!successOrder) {
+  if (!successOrder)
     return { success: false, status: 400, error: incompleteDataMSg };
-  }
 
   //Array com os IDs dos produtos do pedido
   const productIds = orderData.map((data) => data.productId);
@@ -295,14 +278,13 @@ const createUserOrderService = async (id: unknown, reqBody: unknown) => {
     });
 
     //Verifica se stock está vazio
-    if (!order) {
+    if (!order)
       return {
         success: false,
         status: 400,
         error:
           "Não foi possível registrar o pedido. Dados incompletos ou incorretos.",
       };
-    }
 
     return { success: true, status: 201, data: order };
   } catch (error) {
