@@ -19,7 +19,7 @@ try {
   console.log("Banco de dados ok");
 
   app.use("/users", userRouter);
-  app.use("products", productRouter);
+  app.use("/products", productRouter);
   app.listen(port, () => console.log("Server iniciado!"));
 } catch (error) {
   console.log(error);

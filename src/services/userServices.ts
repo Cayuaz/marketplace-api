@@ -24,7 +24,7 @@ const getUserService = async () => {
   }
 };
 
-//Retorna um usuário com base em um determinado ID
+//Retorna um usuário de determinado ID
 const getUserByIdService = async (id: unknown) => {
   console.log(id);
   //Verifica se o id existe
@@ -82,7 +82,7 @@ const createUserService = async (reqBody: unknown) => {
   }
 };
 
-//Modifica alguma informação do usuário e retorna
+//Modifica as informações ou informação de um usuário
 const updateUserService = async (id: unknown, reqBody: unknown) => {
   //Verifica se o id existe
   const { success: successId, data: parsedId } = idSchema.safeParse(id);
