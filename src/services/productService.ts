@@ -1,8 +1,9 @@
 import { prisma } from "../lib/prisma.js";
 import {
-  idSchema,
+  numberSchema,
   createProductSchema,
   updateProductSchema,
+  searchSchema,
 } from "../validations/schemas.js";
 
 const serverErrorMsg =
@@ -12,11 +13,44 @@ const invalidIdMsg =
 const incompleteDataMSg = "Os dados recebidos estão incorretos ou incompletos.";
 
 //Retorna todos os produtos do banco de dados
-const getProductService = async () => {
-  try {
-    const products = await prisma.product.findMany();
+const getProductService = async (search: unknown, page: unknown) => {
+  //Verifica a query string
+  const { data: searchData } = searchSchema.safeParse(search);
 
-    return { success: true, status: 200, data: products };
+  const searchChecked = searchData || "";
+
+  //Verifica o número da página
+  const { data: pageData } = numberSchema.safeParse(page);
+
+  const pageSize = 10;
+
+  const pageChecked = pageData || 1;
+
+  try {
+    //Retorna os produtos com os nomes que contenham a query string e o total de páginas
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where: { name: { contains: searchChecked, mode: "insensitive" } },
+        skip: (pageChecked - 1) * pageSize,
+        take: pageSize,
+      }),
+      prisma.product.count({
+        where: { name: { contains: searchChecked, mode: "insensitive" } },
+      }),
+    ]);
+
+    if (products.length === 0 || !total)
+      return {
+        success: false,
+        status: 404,
+        error: "Não foi possível recuperar os produtos e o total de páginas.",
+      };
+
+    return {
+      success: true,
+      status: 200,
+      data: { products, total: total / pageSize },
+    };
   } catch (error) {
     console.log(error);
     return { success: false, status: 500, error: serverErrorMsg };
@@ -26,7 +60,7 @@ const getProductService = async () => {
 //Retorna um produto de determinado ID
 const getProductByIdService = async (id: unknown) => {
   //Verifica se o id existe
-  const { success, data: parsedId } = idSchema.safeParse(id);
+  const { success, data: parsedId } = numberSchema.safeParse(id);
 
   if (!success) return { success: false, status: 400, error: invalidIdMsg };
 
@@ -76,7 +110,7 @@ const createProductService = async (reqBody: unknown) => {
 //Modifica as informações ou informação de um produto
 const updateProductService = async (id: unknown, reqBody: unknown) => {
   //Verifica se o id existe
-  const { success: successId, data: parsedId } = idSchema.safeParse(id);
+  const { success: successId, data: parsedId } = numberSchema.safeParse(id);
 
   if (!successId) return { success: false, status: 400, error: invalidIdMsg };
 
@@ -117,7 +151,7 @@ const updateProductService = async (id: unknown, reqBody: unknown) => {
 //Deleta um produto
 const deleteProductService = async (id: unknown) => {
   //Verifica se o id existe
-  const { success, data: parsedId } = idSchema.safeParse(id);
+  const { success, data: parsedId } = numberSchema.safeParse(id);
 
   if (!success) return { success: false, status: 400, error: invalidIdMsg };
 

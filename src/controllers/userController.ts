@@ -12,7 +12,7 @@ import {
 
 //Controla as requisições de GET /users
 const getUserController = async (req: Request, res: Response) => {
-  const result = await getUserService();
+  const result = await getUserService(req.query.search, req.query.page);
 
   return result.success
     ? res.status(result.status).json(result.data)

@@ -2,6 +2,10 @@ GET http://localhost:3000/users/100
 
 ###
 
+GET http://localhost:3000/users?search=pe&page=1
+
+###
+
 POST http://localhost:3000/users
 Content-Type: application/json
 
@@ -26,7 +30,7 @@ DELETE http://localhost:3000/users/3
 
 ###
 
-GET http://localhost:3000/products
+GET http://localhost:3000/products?search=mouse&page=2
 
 ###
 

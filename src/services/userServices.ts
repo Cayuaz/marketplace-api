@@ -1,9 +1,10 @@
 import { prisma } from "../lib/prisma.js";
 import {
-  idSchema,
+  numberSchema,
   createUserSchema,
   updateUserSchema,
   createOrderSchema,
+  searchSchema,
 } from "../validations/schemas.js";
 
 const serverErrorMsg =
@@ -13,11 +14,44 @@ const invalidIdMsg =
 const incompleteDataMSg = "Os dados recebidos estão incorretos ou incompletos.";
 
 //Retorna todos os usuários do banco de dados
-const getUserService = async () => {
-  try {
-    const users = await prisma.user.findMany();
+const getUserService = async (search: unknown, page: unknown) => {
+  //Verifica a query string
+  const { data: searchData } = searchSchema.safeParse(search);
 
-    return { success: true, status: 200, data: users };
+  const searchChecked = searchData || "";
+
+  //Verifica o número da página
+  const { data: pageData } = numberSchema.safeParse(page);
+
+  const pageSize = 10;
+
+  const pageChecked = pageData || 1;
+
+  try {
+    //Retorna os usuários com os nomes que contenham a query string e o total de páginas
+    const [users, total] = await Promise.all([
+      prisma.user.findMany({
+        where: { name: { contains: searchChecked, mode: "insensitive" } },
+        skip: (pageChecked - 1) * pageSize,
+        take: pageSize,
+      }),
+      prisma.user.count({
+        where: { name: { contains: searchChecked, mode: "insensitive" } },
+      }),
+    ]);
+
+    if (users.length === 0 || !total)
+      return {
+        success: false,
+        status: 404,
+        error: "Não foi possível recuperar os usuários e o total de páginas.",
+      };
+
+    return {
+      success: true,
+      status: 200,
+      data: { users, total: total / pageSize },
+    };
   } catch (error) {
     console.log(error);
     return { success: false, status: 500, error: serverErrorMsg };
@@ -28,7 +62,7 @@ const getUserService = async () => {
 const getUserByIdService = async (id: unknown) => {
   console.log(id);
   //Verifica se o id existe
-  const { success, data: parsedId } = idSchema.safeParse(id);
+  const { success, data: parsedId } = numberSchema.safeParse(id);
 
   if (!success) return { success: false, status: 400, error: invalidIdMsg };
 
@@ -81,7 +115,7 @@ const createUserService = async (reqBody: unknown) => {
 //Modifica as informações ou informação de um usuário
 const updateUserService = async (id: unknown, reqBody: unknown) => {
   //Verifica se o id existe
-  const { success: successId, data: parsedId } = idSchema.safeParse(id);
+  const { success: successId, data: parsedId } = numberSchema.safeParse(id);
 
   if (!successId) return { success: false, status: 400, error: invalidIdMsg };
 
@@ -123,7 +157,7 @@ const updateUserService = async (id: unknown, reqBody: unknown) => {
 //Delete um usuário
 const deleteUserService = async (id: unknown) => {
   //Verifica se o id existe
-  const { success, data: parsedId } = idSchema.safeParse(id);
+  const { success, data: parsedId } = numberSchema.safeParse(id);
 
   if (!success) return { success: false, status: 400, error: invalidIdMsg };
 
@@ -148,7 +182,7 @@ const deleteUserService = async (id: unknown) => {
 //Retorna todos os pedidos de um respectivo usuário
 const getOrdersUserService = async (id: unknown) => {
   //Verifica se o id existe
-  const { success, data: parsedId } = idSchema.safeParse(id);
+  const { success, data: parsedId } = numberSchema.safeParse(id);
 
   if (!success) return { success: false, status: 400, error: invalidIdMsg };
 
@@ -197,7 +231,7 @@ const getOrdersUserService = async (id: unknown) => {
 //Registra novos pedidos e seus respectivos itens
 const createUserOrderService = async (id: unknown, reqBody: unknown) => {
   //Verifica se o id existe
-  const { success: successId, data: parsedUserId } = idSchema.safeParse(id);
+  const { success: successId, data: parsedUserId } = numberSchema.safeParse(id);
 
   if (!successId) return { success: false, status: 400, error: invalidIdMsg };
 

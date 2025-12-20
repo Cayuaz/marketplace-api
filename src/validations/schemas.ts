@@ -26,13 +26,16 @@ const createOrderSchema = z.array(
 );
 
 //Schema que converte e verifica os IDs recebidos nas rotas
-const idSchema = z.coerce.number().positive().int();
+const numberSchema = z.coerce.number().positive().int();
+
+const searchSchema = z.string().min(1);
 
 export {
   createUserSchema,
   updateUserSchema,
-  idSchema,
+  numberSchema,
   createOrderSchema,
   createProductSchema,
   updateProductSchema,
+  searchSchema,
 };

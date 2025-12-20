@@ -9,7 +9,7 @@ import {
 
 //Controla as requisições de GET /products
 const getProductController = async (req: Request, res: Response) => {
-  const result = await getProductService();
+  const result = await getProductService(req.query.search, req.query.page);
 
   return result.success
     ? res.status(result.status).json(result.data)
