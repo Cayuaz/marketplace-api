@@ -1,10 +1,5 @@
 import { type Request, type Response } from "express";
-import // createProductService,
-// deleteProductService,
-// getProductByIdService,
-// getProductService,
-// updateProductService,
-"../services/productService.js";
+
 import { createProductUseCase } from "../use-cases/products/create-product.js";
 import { getProductUseCase } from "../use-cases/products/get-product.js";
 import { getProductByIdUseCase } from "../use-cases/products/get-product-by-id.js";
