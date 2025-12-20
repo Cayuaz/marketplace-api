@@ -1,8 +1,17 @@
-GET http://localhost:3000/users/4
+GET http://localhost:3000/users/5
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IlBlZHJvIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzY2MjA3OTAxfQ.F0fPTS_U9gfi7cQtNwi11txHtWaGacWIG5foYRwy2vU
 
 ###
 
 GET http://localhost:3000/users?search=&page=1
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IlBlZHJvIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzY2MjAwMTg0fQ.wby1mMzDHIHfld_2yyYiDZbL2reNQkzC_s290pBWIQw
+
+### 
+
+GET http://localhost:3000/products/10
+
 
 ###
 
@@ -18,7 +27,7 @@ DELETE http://localhost:3000/users/3
 
 ###
 
-GET http://localhost:3000/products?search=mouse&page=2
+GET http://localhost:3000/products?search=&page=1
 
 ###
 
@@ -27,9 +36,9 @@ Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IlBlZHJvIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzY2MjAwMTg0fQ.wby1mMzDHIHfld_2yyYiDZbL2reNQkzC_s290pBWIQw
 
 {
- "name": "Calça",
- "price": 229.99,
- "stock": "10"
+ "name": "Mario Kart",
+ "price": 300.00,
+ "stock": "71"
 }
 
 ###
@@ -38,9 +47,9 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
- "name": "Camile",
- "lastname": "Dias",
- "email": "example@gmail.com",
+ "name": "Kaio",
+ "lastname": "Gomes",
+ "email": "example1@gmail.com",
  "password": "senha"
 }
 
@@ -53,3 +62,41 @@ Content-Type: application/json
  "email": "pedro@gmail.com",
  "password": "123456"
 }
+
+### 
+PATCH http://localhost:3000/products/6
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IlBlZHJvIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzY2MjA3OTAxfQ.F0fPTS_U9gfi7cQtNwi11txHtWaGacWIG5foYRwy2vU
+
+{
+ "name": "Garrafa de água"
+}
+
+###
+
+DELETE http://localhost:3000/users/8
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IlBlZHJvIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzY2MjA3OTAxfQ.F0fPTS_U9gfi7cQtNwi11txHtWaGacWIG5foYRwy2vU
+
+### 
+PATCH http://localhost:3000/users/4
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IlBlZHJvIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzY2MjA3OTAxfQ.F0fPTS_U9gfi7cQtNwi11txHtWaGacWIG5foYRwy2vU
+
+{
+ "lastname": "Santos"
+}
+###
+POST http://localhost:3000/users/4/order
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IlBlZHJvIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzY2MjA3OTAxfQ.F0fPTS_U9gfi7cQtNwi11txHtWaGacWIG5foYRwy2vU
+
+
+ [
+    {"productId": 9, "quantity": 2}
+ ]
+
+###
+GET http://localhost:3000/users/4/orders
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IlBlZHJvIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzY2MjA3OTAxfQ.F0fPTS_U9gfi7cQtNwi11txHtWaGacWIG5foYRwy2vU

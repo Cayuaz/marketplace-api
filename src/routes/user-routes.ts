@@ -2,11 +2,11 @@ import { Router } from "express";
 import {
   createUserOrderController,
   deleteUserController,
-  getOrdersUserController,
+  getUserOrdersController,
   getUserByIdController,
   getUserController,
   updateUserController,
-} from "../controllers/userController.js";
+} from "../controllers/user-controller.js";
 import { isAdmin, isLogged } from "../middlewares.js";
 
 const router = Router();
@@ -25,7 +25,7 @@ router.patch("/:id", isLogged, updateUserController);
 router.delete("/:id", isLogged, deleteUserController);
 
 //Rota GET /users:id/orders
-router.get("/:id/orders", isLogged, getOrdersUserController);
+router.get("/:id/orders", isLogged, getUserOrdersController);
 
 //Rota POST /users:id/order
 

@@ -5,9 +5,9 @@
 import { prisma } from "./lib/prisma.js";
 import express from "express";
 import cors from "cors";
-import userRouter from "./routes/userRoutes.js";
-import productRouter from "./routes/productRoutes.js";
-import authRouter from "./routes/authRoute.js";
+import userRouter from "./routes/user-routes.js";
+import productRouter from "./routes/product-routes.js";
+import authRouter from "./routes/auth-routes.js";
 
 const port = process.env.PORT || 3000;
 const app = express();

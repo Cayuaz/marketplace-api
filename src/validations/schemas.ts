@@ -1,3 +1,4 @@
+import { Decimal } from "@prisma/client/runtime/client";
 import * as z from "zod";
 
 //Schemas de create
@@ -37,6 +38,22 @@ const numberSchema = z.coerce.number().positive().int();
 
 const searchSchema = z.string().min(1);
 
+const productWithQuantity = z.object({
+  name: z.string().min(3).max(100),
+  price: Decimal,
+  stock: z.coerce.number().positive().int().optional(),
+  quantity: z.number().positive().int(),
+  createdAt: z.date(),
+  id: z.number().positive().int(),
+});
+
+type createProductType = z.infer<typeof createProductSchema>;
+type updateProductType = z.infer<typeof updateProductSchema>;
+type loginType = z.infer<typeof loginSchema>;
+type createUserType = z.infer<typeof createUserSchema>;
+type updateUserType = z.infer<typeof updateUserSchema>;
+type productWithQuantityType = z.infer<typeof productWithQuantity>;
+
 export {
   createUserSchema,
   updateUserSchema,
@@ -46,4 +63,11 @@ export {
   updateProductSchema,
   searchSchema,
   loginSchema,
+  productWithQuantity,
+  type createProductType,
+  type updateProductType,
+  type loginType,
+  type createUserType,
+  type updateUserType,
+  type productWithQuantityType,
 };

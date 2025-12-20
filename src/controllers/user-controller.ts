@@ -1,17 +1,22 @@
 // import { prisma } from "../lib/prisma.js";
 import { type Request, type Response } from "express";
-import {
-  createUserOrderService,
-  deleteUserService,
-  getOrdersUserService,
-  getUserByIdService,
-  getUserService,
-  updateUserService,
-} from "../services/userServices.js";
+import // createUserOrderService,
+// deleteUserService,
+// getOrdersUserService,
+// getUserByIdService,
+// getUserService,
+// updateUserService,
+"../services/userServices.js";
+import { getUserUseCase } from "../use-cases/users/get-user.js";
+import { getUserByIdUseCase } from "../use-cases/users/get-user-by-id.js";
+import { updateUserUseCase } from "../use-cases/users/update-user.js";
+import { deleteUserUseCase } from "../use-cases/users/delete-user.js";
+import { getUserOrdersUseCase } from "../use-cases/users/get-user-orders.js";
+import { createUserOrderUseCase } from "../use-cases/users/create-user-order.js";
 
 //Controla as requisições de GET /users
 const getUserController = async (req: Request, res: Response) => {
-  const result = await getUserService(req.query.search, req.query.page);
+  const result = await getUserUseCase(req.query.search, req.query.page);
 
   return result.success
     ? res.status(result.status).json(result.data)
@@ -20,7 +25,7 @@ const getUserController = async (req: Request, res: Response) => {
 
 //Controla as requisições de GET /users/id
 const getUserByIdController = async (req: Request, res: Response) => {
-  const result = await getUserByIdService(req.params.id);
+  const result = await getUserByIdUseCase(req.params.id);
 
   return result.success
     ? res.status(result.status).json(result.data)
@@ -29,7 +34,7 @@ const getUserByIdController = async (req: Request, res: Response) => {
 
 //Controla as requisições de PATCH /users:id
 const updateUserController = async (req: Request, res: Response) => {
-  const result = await updateUserService(req.params.id, req.body);
+  const result = await updateUserUseCase(req.params.id, req.body);
 
   return result.success
     ? res.status(result.status).json(result.data)
@@ -38,7 +43,7 @@ const updateUserController = async (req: Request, res: Response) => {
 
 //Controla as requisições de DELETE /users:id
 const deleteUserController = async (req: Request, res: Response) => {
-  const result = await deleteUserService(req.params.id);
+  const result = await deleteUserUseCase(req.params.id);
 
   return result.success
     ? res.status(result.status).end()
@@ -46,8 +51,8 @@ const deleteUserController = async (req: Request, res: Response) => {
 };
 
 //Controla as requisições GET user/id/orders
-const getOrdersUserController = async (req: Request, res: Response) => {
-  const result = await getOrdersUserService(req.params.id);
+const getUserOrdersController = async (req: Request, res: Response) => {
+  const result = await getUserOrdersUseCase(req.params.id);
 
   return result.success
     ? res.status(result.status).json(result.data)
@@ -56,7 +61,7 @@ const getOrdersUserController = async (req: Request, res: Response) => {
 
 //Controla as requisições POST user/id/order
 const createUserOrderController = async (req: Request, res: Response) => {
-  const result = await createUserOrderService(req.params.id, req.body);
+  const result = await createUserOrderUseCase(req.params.id, req.body);
 
   return result.success
     ? res.status(result.status).json(result.data)
@@ -68,6 +73,6 @@ export {
   getUserByIdController,
   updateUserController,
   deleteUserController,
-  getOrdersUserController,
+  getUserOrdersController,
   createUserOrderController,
 };

@@ -5,7 +5,7 @@ import {
   getProductByIdController,
   getProductController,
   updateProductController,
-} from "../controllers/productController.js";
+} from "../controllers/product-controller.js";
 import { isAdmin, isLogged } from "../middlewares.js";
 
 const router = Router();

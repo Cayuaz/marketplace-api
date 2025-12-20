@@ -1,12 +1,10 @@
 import { type Request, type Response } from "express";
-import {
-  authLoginService,
-  authRegisterService,
-} from "../services/authService.js";
+import { loginUseCase } from "../use-cases/auth/login.js";
+import { registerUseCase } from "../use-cases/auth/register.js";
 
 //Controla as requisições de POST /auth/register
 const authRegisterController = async (req: Request, res: Response) => {
-  const result = await authRegisterService(req.body);
+  const result = await registerUseCase(req.body);
 
   return result.success
     ? res.status(result.status).end()
@@ -15,7 +13,7 @@ const authRegisterController = async (req: Request, res: Response) => {
 
 //Controla as requisições de POST /auth/login
 const authLoginController = async (req: Request, res: Response) => {
-  const result = await authLoginService(req.body);
+  const result = await loginUseCase(req.body);
 
   return result.success
     ? res.status(result.status).json(result.data)

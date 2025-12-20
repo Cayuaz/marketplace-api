@@ -211,17 +211,19 @@ const getOrdersUserService = async (id: unknown) => {
 
 //Registra novos pedidos e seus respectivos itens
 const createUserOrderService = async (id: unknown, reqBody: unknown) => {
-  //Verifica se o id existe
+  //Verifica se o id do usuário existe
   const { success: successId, data: parsedUserId } = numberSchema.safeParse(id);
 
   if (!successId) return { success: false, status: 400, error: invalidIdMsg };
 
-  //Verifica se o req.body é do tipo correto (productId e quantity)
+  //Verifica se o req.body é do tipo correto {productId e quantity}[]
   const { success: successOrder, data: orderData } =
     createOrderSchema.safeParse(reqBody);
 
   if (!successOrder)
     return { success: false, status: 400, error: incompleteDataMSg };
+
+  console.log(orderData);
 
   //Array com os IDs dos produtos do pedido
   const productIds = orderData.map((data) => data.productId);
@@ -231,15 +233,26 @@ const createUserOrderService = async (id: unknown, reqBody: unknown) => {
     where: { id: { in: productIds } },
   });
 
+  console.log(productIds);
+  console.log(products);
+
   //Compara os IDs de products com os de orderData para encontrar a quantidade correspondente de cada produto comprado
   const productsWithQuantity = products.map((product) => {
     const orderInfo = orderData.find((data) => data.productId === product.id);
 
+    if (typeof orderInfo?.quantity !== "number" || orderInfo?.quantity === 0) {
+      throw new Error(
+        "A quantidade do produto comprado precisa ser maior que zero."
+      );
+    }
+
     return {
       ...product,
-      quantity: orderInfo?.quantity as number,
+      quantity: orderInfo.quantity,
     };
   });
+
+  console.log(productsWithQuantity);
 
   //Verifica se algum produto teve a quantidade de compra maior que o estoque disponível
   const productWithNoStock = productsWithQuantity.find(
@@ -250,10 +263,11 @@ const createUserOrderService = async (id: unknown, reqBody: unknown) => {
     return {
       success: false,
       status: 400,
-      error:
-        "A quantidade dos produtos não pode ser maior que o estoque disponível.",
+      error: ` ${productWithNoStock.name} está com estoque indisponível.`,
     };
   }
+
+  // console.log(productWithNoStock);
 
   //Calcula o valor total do pedido
   const total = productsWithQuantity.reduce(
@@ -261,11 +275,13 @@ const createUserOrderService = async (id: unknown, reqBody: unknown) => {
     0
   );
 
+  console.log(total);
+
   //Dados do pedido para serem registrado no banco de dados
-  const orderToCreate = {
-    userID: parsedUserId,
-    total,
-  };
+  // const orderToCreate = {
+  //   userId: parsedUserId,
+  //   total,
+  // };
 
   try {
     const order = await prisma.$transaction(async (tx) => {
@@ -280,8 +296,8 @@ const createUserOrderService = async (id: unknown, reqBody: unknown) => {
       //Cria o pedido e registra os itens dele
       return await tx.order.create({
         data: {
-          userId: orderToCreate.userID,
-          total,
+          userId: parsedUserId,
+          total: total,
           orderitem: {
             create: productsWithQuantity.map((product) => ({
               productId: product.id,
