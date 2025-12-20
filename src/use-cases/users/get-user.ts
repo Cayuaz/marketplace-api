@@ -8,7 +8,6 @@ const repository = userRepository();
 const serverErrorMsg =
   "Ocorreu um erro no servidor. Tente novamente mais tarde.";
 
-//Retorna todos os usuários do banco de dados
 const getUserUseCase = async (search: unknown, page: unknown) => {
   //Verifica a query string
   const { data: searchData } = searchSchema.safeParse(search);

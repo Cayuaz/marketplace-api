@@ -14,7 +14,6 @@ const invalidIdMsg =
   "O ID do usuário é inválido. O ID precisa ser um número inteiro.";
 const incompleteDataMSg = "Os dados recebidos estão incorretos ou incompletos.";
 
-//Modifica as informações ou informação de um produto
 const updateProductUseCase = async (id: unknown, reqBody: unknown) => {
   // console.log(reqBody);
   //Verifica se o id existe

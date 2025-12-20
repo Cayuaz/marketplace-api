@@ -10,7 +10,6 @@ const serverErrorMsg =
 const invalidIdMsg =
   "O ID do usuário é inválido. O ID precisa ser um número inteiro.";
 
-//Retorna todos os usuários do banco de dados
 const getUserByIdUseCase = async (id: unknown) => {
   console.log(id);
   //Verifica se o id existe

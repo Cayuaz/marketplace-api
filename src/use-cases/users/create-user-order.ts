@@ -35,6 +35,7 @@ const createUserOrderUseCase = async (id: unknown, reqBody: unknown) => {
   const productsWithQuantity = products.map((product) => {
     const orderInfo = orderData.find((data) => data.productId === product.id);
 
+    //Verifica se a quantidade é um número maior que 0
     if (typeof orderInfo?.quantity !== "number" || orderInfo?.quantity === 0) {
       throw new Error(
         "A quantidade do produto comprado precisa ser maior que zero."

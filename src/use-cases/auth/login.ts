@@ -7,11 +7,10 @@ const repository = authRepository();
 
 const serverErrorMsg =
   "Ocorreu um erro no servidor. Tente novamente mais tarde.";
-// const invalidIdMsg =
-//   "O ID do usuário é inválido. O ID precisa ser um número inteiro.";
 const incompleteDataMSg = "Os dados recebidos estão incorretos ou incompletos.";
 
 const loginUseCase = async (reqBody: unknown) => {
+  //Verifica se o req.body é do tipo correto (email e password)
   const { success, data } = loginSchema.safeParse(reqBody);
 
   if (!success)

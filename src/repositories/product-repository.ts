@@ -6,6 +6,7 @@ import type {
 
 const productRepository = () => {
   return {
+    //Adiciona um novo produto no banco de dados
     createProduct: async (data: createProductType) =>
       await prisma.product.create({
         data: {
@@ -14,32 +15,41 @@ const productRepository = () => {
           stock: data.stock || 0,
         },
       }),
+    /*Retorna todos os produtos do banco de dados
+    Skip: é o número de produtos que vão se pulados
+    Take: é o limite de produtos retornados em cada response
+    Page: é a página atual do site - ex: 1, 2 3
+    Se a página é 2 e pageSize 10, skip vai pular 10 produtos, (2 - 1 = 1) * 10 = 10
+    */
     getProduct: async (
-      searchChecked: string,
+      search: string,
       pageSize: number,
-      pageChecked: number
+      pageNumber: number
     ) => {
       return await Promise.all([
         prisma.product.findMany({
-          where: { name: { contains: searchChecked, mode: "insensitive" } },
-          skip: (pageChecked - 1) * pageSize,
+          where: { name: { contains: search, mode: "insensitive" } },
+          skip: (pageNumber - 1) * pageSize,
           take: pageSize,
         }),
         prisma.product.count({
-          where: { name: { contains: searchChecked, mode: "insensitive" } },
+          where: { name: { contains: search, mode: "insensitive" } },
         }),
       ]);
     },
+    //Busca um produto com base no Id
     getProductById: async (parsedId: number) => {
       return await prisma.product.findUnique({
         where: { id: parsedId },
       });
     },
+    //Retorna os produtos de um pedido com base nos Ids desses produtos
     getProductOrder: async (productIds: number[]) => {
       return await prisma.product.findMany({
         where: { id: { in: productIds } },
       });
     },
+    //Atualiza alguma informação de um determinado produto
     updateProduct: async (parsedId: number, dataUpdate: updateProductType) => {
       return await prisma.product.update({
         where: { id: parsedId },
@@ -50,6 +60,7 @@ const productRepository = () => {
         },
       });
     },
+    //Deleta um produto
     deleteProduct: async (parsedId: number) => {
       return await prisma.product.delete({
         where: { id: parsedId },
