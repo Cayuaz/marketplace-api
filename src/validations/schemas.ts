@@ -5,7 +5,7 @@ const createUserSchema = z.object({
   name: z.string().max(60),
   lastname: z.string().max(150),
   email: z.email(),
-  password: z.string().min(6).max(255),
+  password: z.string().min(5).max(255),
 });
 
 const createProductSchema = z.object({

@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  createUserController,
   createUserOrderController,
   deleteUserController,
   getOrdersUserController,
@@ -17,9 +16,6 @@ router.get("/", getUserController);
 
 // Rota: GET /users/id
 router.get("/:id", getUserByIdController);
-
-// Rota: POST /users
-router.post("/", createUserController);
 
 //Rota: PATCH /users:id
 router.patch("/:id", updateUserController);

@@ -1,7 +1,6 @@
 import { prisma } from "../lib/prisma.js";
 import {
   numberSchema,
-  createUserSchema,
   updateUserSchema,
   createOrderSchema,
   searchSchema,
@@ -78,34 +77,6 @@ const getUserByIdService = async (id: unknown) => {
       };
 
     return { success: true, status: 200, data: user };
-  } catch (error) {
-    console.log(error);
-    return { success: false, status: 500, error: serverErrorMsg };
-  }
-};
-
-//Cria um novo usuário e retorna ele
-const createUserService = async (reqBody: unknown) => {
-  //Verifica se o req.body é do tipo correto (name, lastname, email e password)
-  const { success, data: userData } = createUserSchema.safeParse(reqBody);
-
-  if (!success)
-    return {
-      success: false,
-      status: 400,
-      error: incompleteDataMSg,
-    };
-
-  try {
-    const user = await prisma.user.create({
-      data: {
-        name: userData.name,
-        lastname: userData.lastname,
-        email: userData.email,
-        password: userData.password,
-      },
-    });
-    return { success: true, status: 201, data: user };
   } catch (error) {
     console.log(error);
     return { success: false, status: 500, error: serverErrorMsg };
@@ -330,7 +301,6 @@ const createUserOrderService = async (id: unknown, reqBody: unknown) => {
 export {
   getUserService,
   getUserByIdService,
-  createUserService,
   updateUserService,
   deleteUserService,
   getOrdersUserService,

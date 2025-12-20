@@ -2,7 +2,6 @@
 import { type Request, type Response } from "express";
 import {
   createUserOrderService,
-  createUserService,
   deleteUserService,
   getOrdersUserService,
   getUserByIdService,
@@ -22,15 +21,6 @@ const getUserController = async (req: Request, res: Response) => {
 //Controla as requisições de GET /users/id
 const getUserByIdController = async (req: Request, res: Response) => {
   const result = await getUserByIdService(req.params.id);
-
-  return result.success
-    ? res.status(result.status).json(result.data)
-    : res.status(result.status).json(result.error);
-};
-
-//Controla as requisições de POST /users
-const createUserController = async (req: Request, res: Response) => {
-  const result = await createUserService(req.body);
 
   return result.success
     ? res.status(result.status).json(result.data)
@@ -76,7 +66,6 @@ const createUserOrderController = async (req: Request, res: Response) => {
 export {
   getUserController,
   getUserByIdController,
-  createUserController,
   updateUserController,
   deleteUserController,
   getOrdersUserController,
