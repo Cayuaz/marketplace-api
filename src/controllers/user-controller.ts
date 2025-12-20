@@ -1,12 +1,6 @@
 // import { prisma } from "../lib/prisma.js";
 import { type Request, type Response } from "express";
-import // createUserOrderService,
-// deleteUserService,
-// getOrdersUserService,
-// getUserByIdService,
-// getUserService,
-// updateUserService,
-"../services/userServices.js";
+
 import { getUserUseCase } from "../use-cases/users/get-user.js";
 import { getUserByIdUseCase } from "../use-cases/users/get-user-by-id.js";
 import { updateUserUseCase } from "../use-cases/users/update-user.js";
