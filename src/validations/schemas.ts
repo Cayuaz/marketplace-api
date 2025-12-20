@@ -14,10 +14,6 @@ const createProductSchema = z.object({
   stock: z.coerce.number().positive().int().optional(),
 });
 
-//Schemas de update
-const updateUserSchema = createUserSchema.partial();
-const updateProductSchema = createProductSchema.partial();
-
 const createOrderSchema = z.array(
   z.object({
     productId: z.coerce.number().positive().int(),
@@ -25,7 +21,18 @@ const createOrderSchema = z.array(
   })
 );
 
-//Schema que converte e verifica os IDs recebidos nas rotas
+//Schemas de update
+const updateUserSchema = createUserSchema.partial();
+
+const updateProductSchema = createProductSchema.partial();
+
+//Schema de login
+const loginSchema = createUserSchema.pick({
+  email: true,
+  password: true,
+});
+
+//Schema que converte um valor para número e verifica se ele é inteiro e positivo
 const numberSchema = z.coerce.number().positive().int();
 
 const searchSchema = z.string().min(1);
@@ -38,4 +45,5 @@ export {
   createProductSchema,
   updateProductSchema,
   searchSchema,
+  loginSchema,
 };

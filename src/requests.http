@@ -1,28 +1,16 @@
-GET http://localhost:3000/users/100
+GET http://localhost:3000/users/4
 
 ###
 
-GET http://localhost:3000/users?search=pe&page=1
+GET http://localhost:3000/users?search=&page=1
 
 ###
 
-POST http://localhost:3000/auth/register
+PATCH http://localhost:3000/users/2
 Content-Type: application/json
 
 {
- "name": "Camile",
- "lastname": "Dias",
- "email": "example@gmail.com",
- "password": "senha"
-}
-
-###
-
-PATCH http://localhost:3000/users/3
-Content-Type: application/json
-
-{
- "name": "Fernando"
+ "password": "1234556"
 }
 
 ###
@@ -36,9 +24,32 @@ GET http://localhost:3000/products?search=mouse&page=2
 
 POST http://localhost:3000/products
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IlBlZHJvIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzY2MjAwMTg0fQ.wby1mMzDHIHfld_2yyYiDZbL2reNQkzC_s290pBWIQw
 
 {
- "name": "Camiseta",
- "price": 129.99,
- "stock": "2"
+ "name": "Calça",
+ "price": 229.99,
+ "stock": "10"
+}
+
+###
+
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+ "name": "Camile",
+ "lastname": "Dias",
+ "email": "example@gmail.com",
+ "password": "senha"
+}
+
+### 
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+ "email": "pedro@gmail.com",
+ "password": "123456"
 }

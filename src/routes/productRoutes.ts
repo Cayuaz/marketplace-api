@@ -6,6 +6,7 @@ import {
   getProductController,
   updateProductController,
 } from "../controllers/productController.js";
+import { isAdmin, isLogged } from "../middlewares.js";
 
 const router = Router();
 
@@ -16,12 +17,12 @@ router.get("/", getProductController);
 router.get("/:id", getProductByIdController);
 
 // Rota: POST /products
-router.post("/", createProductController);
+router.post("/", isLogged, isAdmin, createProductController);
 
 //Rota PATCH /products:id
-router.patch("/:id", updateProductController);
+router.patch("/:id", isLogged, isAdmin, updateProductController);
 
 // Rota: DELETE /products:id
-router.delete("/:id", deleteProductController);
+router.delete("/:id", isLogged, isAdmin, deleteProductController);
 
 export default router;

@@ -31,6 +31,7 @@ const getUserService = async (search: unknown, page: unknown) => {
     const [users, total] = await Promise.all([
       prisma.user.findMany({
         where: { name: { contains: searchChecked, mode: "insensitive" } },
+
         skip: (pageChecked - 1) * pageSize,
         take: pageSize,
       }),
@@ -66,7 +67,16 @@ const getUserByIdService = async (id: unknown) => {
   if (!success) return { success: false, status: 400, error: invalidIdMsg };
 
   try {
-    const user = await prisma.user.findUnique({ where: { id: parsedId } });
+    const user = await prisma.user.findUnique({
+      where: { id: parsedId },
+      select: {
+        id: true,
+        name: true,
+        lastname: true,
+        email: true,
+        createdAt: true,
+      },
+    });
 
     //Verifica se o prisma conseguiu achar o usuário
     if (!user)

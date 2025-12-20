@@ -6,5 +6,6 @@ declare namespace NodeJS {
     DB_NAME: string;
     DB_PORT: number;
     DB_URL: string;
+    SECRET: string;
   }
 }
